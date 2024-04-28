@@ -114,6 +114,7 @@ export const createOrder = catchError(async (req, res, next) => {
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             mode: 'payment',
+            metedate : {order_id: order._id.toString()},
             success_url: "http://success.com", // link
             cancel_url: "http://cancel.com", /// link
             line_items: order.product.map((product) => {

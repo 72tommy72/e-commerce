@@ -53,7 +53,7 @@ export const updateBrand = catchError(async (req, res, next) => {
         const { secure_url, public_id } = await cloudinary.uploader.upload(
             req.file.path,
             {
-                folder: `${process.env.FOLDER_CLOUD_NAME}/${process.env.FOLDER_CLOUD_NAME2}/Brand`,
+                folder: `${process.env.FOLDER_CLOUD_NAME}/Brand`,
             }
         );
 

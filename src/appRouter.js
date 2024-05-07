@@ -15,24 +15,24 @@ export const appRouter = (app, express) => {
     } else {
         app.use(morgan("combined"));
     }
-    //cors
-    const whiteList = [];
-    app.use((req, res, next) => {
-        //activation account
-        if (req.originalUrl.includes('/auth/confirmEmail')) {
-            res.setHeader('Access-Control-Allow-Origin', "*");
-            res.setHeader('Access-Control-Allow-Headers', "GET");
-            return next();
-        }
-        if (!whiteList.includes(req.header('origin'))) {
-            return next(new Error('blocked by cors'));
-        }
-        res.setHeader('Access-Control-Allow-Origin', "*");
-        res.setHeader('Access-Control-Allow-Headers', "*");
-        res.setHeader('Access-Control-Allow-Methods', "*");
-        res.setHeader('Access-Control-Allow-Private-Network', true);
-        return next();
-    })
+    // //cors
+    // const whiteList = [];
+    // app.use((req, res, next) => {
+    //     //activation account
+    //     if (req.originalUrl.includes('/auth/confirmEmail')) {
+    //         res.setHeader('Access-Control-Allow-Origin', "*");
+    //         res.setHeader('Access-Control-Allow-Headers', "GET");
+    //         return next();
+    //     }
+    //     if (!whiteList.includes(req.header('origin'))) {
+    //         return next(new Error('blocked by cors'));
+    //     }
+    //     res.setHeader('Access-Control-Allow-Origin', "*");
+    //     res.setHeader('Access-Control-Allow-Headers', "*");
+    //     res.setHeader('Access-Control-Allow-Methods', "*");
+    //     res.setHeader('Access-Control-Allow-Private-Network', true);
+    //     return next();
+    // })
     //global Routes
     app.use((req, res, next) => { // parse data from cover to Json
         if (req.originalUrl === '/order/webhook') {

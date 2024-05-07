@@ -6,6 +6,7 @@ import { isAuthenticated } from "../../middleware/authentication.middleware.js";
 import { isAuthorized } from "../../middleware/authorization.middleware.js";
 import { filterObject, fileUpload } from "../../utils/multer.js";
 import brandRouter from "./../../modules/brand/brand.router.js";
+import { allBrands } from "./brand.controller.js";
 
 
 
@@ -40,6 +41,6 @@ router.delete(
     isValid(deleteBrandSchema), // multer turn data to json because express do not support that
     // deleteBrand
 );
-//get Brands
-// router.get("/", allBrands)
+// get Brands
+router.get("/", allBrands)
 export default router;

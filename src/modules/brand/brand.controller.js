@@ -1,82 +1,94 @@
-import { Category } from "../../../DB/models/category.model.js";
-import { Brand } from "../../../DB/models/sub.category.model.js";
+import { Brand } from "../../../DB/models/brand.model.js";
 import { catchError } from "../../utils/catchError.js";
 import cloudinary from "../../utils/cloud.js";
-import slugify from "slugify"
+import slugify from "slugify";
 
 export const createBrand = catchError(async (req, res, next) => {
-    //data  
-    const { categoryId } = req.params;
+    const { name, categoryId } = req.body;
+
+    if (await Brand.findOne({ name })) {
+        return next(new Error(`duplicate brand name ${name}`, { cause: 409 }));
+    }
     //check file
     if (!req.file) return next(new Error("image is required: ", { cause: 400 }));
-    //check categoryId
-    const category = await Category.findById(categoryId);
-    if (!category) return next(new Error("category not found: ", { cause: 404 }));
-    //upload file
-    const { public_id, secure_url } = await cloudinary.uploader.upload(req.file.path,
+    const { secure_url, public_id } = await cloudinary.uploader.upload(
+        req.file.path,
         {
-            folders: `${process.env.FOLDER_CLOUD_NAME}/brand`
-        })
-    //save in db
+            folder: `${process.env.FOLDER_CLOUD_NAME}/Brand`,
+        }
+    );
     const brand = await Brand.create({
-        name: req.body.name,
-        createdBy: req.user._id,
-        image: { url: secure_url, id: public_id },
-        slug: slugify(req.body.name),
+        name,
         categoryId,
-
-    })
+        image: { secure_url, public_id },
+        createdBy: req.user._id,
+        updatedBy: req.user._id,
+    });
     //send response
     return res.status(201).json({
         success: true,
-        result: brand
-    })
-
-})
+        result: brand,
+    });
+});
 export const updateBrand = catchError(async (req, res, next) => {
-    // check category
-    const category = await Brand.findById(req.params.categoryId)
-    if (!category) return next(new Error("category not found", { cause: 404 }))
-    // check Brand
-    const brand = await Brand.findById(req.params.brandId)
-    if (!brand) return next(new Error("brand not found", { cause: 404 }))
+    const brandId = req.params.brandId;
+    const brand = await Brand.findById(brandId);
 
-    brand.name = req.body.name ? req.body.name : brand.name;
-    brand.slug = req.body.name ? slugify(req.body.name) : brand.slug;
-
-    //check file 
-    if (req.file) {
-        const { secure_url } = await cloudinary.uploader.upload(req.file.path, {
-            public_id: brand.image.id
-        })
-        brand.image.url = secure_url;
+    if (!brand) {
+        return next(new Error(`Invalid brand ${brandId}`), { cause: 409 });
     }
+
+    if (req.body.name) {
+        if (brand.name == req.body.name) {
+            return next(new Error(`old name matches new name`), { cause: 400 });
+        }
+        if (await Brand.findOne({ name: req.body.name })) {
+            return next(new Error(`duplicate brand name`), { cause: 409 });
+        }
+        brand.name = req.body.name;
+        brand.slug = slugify(req.body.name);
+    }
+
+    if (req.file) {
+        const { secure_url, public_id } = await cloudinary.uploader.upload(
+            req.file.path,
+            {
+                folder: `${process.env.FOLDER_CLOUD_NAME}/${process.env.FOLDER_CLOUD_NAME2}/Brand`,
+            }
+        );
+
+        await cloudinary.uploader.destroy(brand.image.public_id);
+        brand.image = { secure_url, public_id };
+    }
+
     await brand.save();
     //send response
     return res.status(201).json({
         success: "updated  successfully",
-        result: brand
-    })
-})
+        result: brand,
+    });
+});
 export const deleteBrand = catchError(async (req, res, next) => {
-    // check category
-    const category = await Brand.findById(req.params.categoryId)
-    if (!category) return next(new Error("category not found", { cause: 404 }))
-    // check brand and delete
-    const brand = await Brand.findByIdAndDelete(req.params.brandId)
-    if (!brand) return next(new Error("brand not found", { cause: 404 }))
+    const brandId = req.params.brandId;
+
+    const deletedBrand = await Brand.findByIdAndDelete(brandId);
+
+    if (!deletedBrand) {
+        return next(new Error(`Brand with ID ${brandId} not found`), {
+            cause: 404,
+        });
+    }
     //send response
     return res.status(201).json({
         success: "deleted  successfully",
-    })
-})
-export const allSubCategories = catchError(async (req, res, next) => {
+    });
+});
+export const allBrands = catchError(async (req, res, next) => {
     // check category
-    const subCategories = await Brand.find().populate("categoryId");
+    const brands = await Brand.find();
+
     return res.status(200).json({
-        success: true,
-        result: subCategories
-    })
-
-})
-
+        message: "success",
+        brands
+    });
+});

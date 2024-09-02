@@ -6,7 +6,6 @@ export const addToCart = catchError(async (req, res, next) => {
     //data
     const { userId } = req.user;
     const { productId, quantity } = req.body;
-
     //check productId
     const checkProduct = await Product.findOne({
         _id: productId,
@@ -14,7 +13,6 @@ export const addToCart = catchError(async (req, res, next) => {
     });
     if (!checkProduct)
         return next(new Error("please check the quantity ", { cause: 401 }));
-
     //check he has cart
     const cartUser = await Cart.findOne({ _id: userId }).lean() // to turn form json to object;
     if (cartUser) {
@@ -26,7 +24,6 @@ export const addToCart = catchError(async (req, res, next) => {
                 product.quantity = quantity;
             }
         }
-        
         //push new product
         if (!productExist) {
             cartUser.products.push({ productId, quantity });
@@ -57,19 +54,17 @@ export const addToCart = catchError(async (req, res, next) => {
         message: cartDB,
     });
 });
-
 export const deleteFromCart = catchError(async (req, res, next) => {
     //data
     const { userId } = req.user;
     const { productId } = req.body;
-
     //check productId
     const checkProduct = await Product.findOne({
         _id: productId
     });
     if (!checkProduct)
         return next(new Error("invalid product id ", { cause: 401 }));
-
+    
     const cartUser = await Cart.findOne({ userId, 'products.productId': productId });
     if (!cartUser) return next(new Error("no product in cart  ", { cause: 401 })); 
 

@@ -52,13 +52,13 @@ export const userSchema = new Schema({
     role: {
         type: String,
         enum: ["admin", "user"],
-        default : 'user'
-            
+        default: 'user'
+
     },
     phone: String,
     forgetCode: String,
     activationCode: String,
-    
+
 
 
 }, { timestamp: true })

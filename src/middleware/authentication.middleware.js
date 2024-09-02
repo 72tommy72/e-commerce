@@ -3,14 +3,14 @@ import { catchError } from "../utils/catchError.js";
 import { Token } from "../../DB/models/token.model.js";
 import { User } from "../../DB/models/user.model.js";
 
-export const isAuthenticated = catchError(async (req, res, next) => {
+export const isAuthenticated = catchError(async(req, res, next) => {
     // check if token is existence
-    let token = req.header["token"];
-    if (!token || token.startsWith(process.env.BEARER_TOKEN))
+    let token = req.headers["token"];
+    if (!token || !token.startsWith(process.env.BEARER_TOKEN))
         return next(new Error("valid token is required"));
     //check payload
     token = token.split(process.env.BEARER_TOKEN)[1];
-    const decoded = jwt.verify(token ,process.env.SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
     if (!decoded) return next(new Error("invalid token"));
     //check token in DB
     const tokenDB = await Token.findOne({ token, isValid: true });

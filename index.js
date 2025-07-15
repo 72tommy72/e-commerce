@@ -30,11 +30,12 @@ import serverless from 'serverless-http';
 // Load env variables
 dotenv.config();
 
-// Connect to DB once globally (safe for serverless)
-await connectDB();
-
 // Initialize Express app
 const app = express();
+
+// Connect to DB once globally (safe for serverless)
+connectDB();
+
 appRouter(app, express);
 
 // Export handler for Vercel

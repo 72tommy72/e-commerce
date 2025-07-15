@@ -21,22 +21,42 @@
 // app.listen(port, () => {
 //     console.log(`Server is running successfully on port ${port}`);
 // });
+// Import required packages
 import express from 'express';
 import dotenv from 'dotenv';
 import { connectDB } from '../DB/connectionDB.js';
 import { appRouter } from '../src/appRouter.js';
 import serverless from 'serverless-http';
 
-// Load env variables
+// Load environment variables
 dotenv.config();
 
-// Initialize Express app
-const app = express();
+// Initialize handler variable
+let handler;
 
-// Connect to DB once globally (safe for serverless)
-connectDB();
+// Setup function to initialize express app and database connection
+const setup = async () => {
+    try {
+        // Connect to database
+        await connectDB(); // Must use await here
+        
+        // Initialize express app and routes
+        const app = express();
+        appRouter(app, express);
+        
+        // Create serverless handler after connection is established
+        handler = serverless(app); // Handler must be created after connection
+    } catch (error) {
+        // Log error and create error handler
+        console.error("❌ Error in setup:", error);
+        handler = async (req, res) => {
+            res.status(500).json({ success: false, message: "Server crash", error: error.message });
+        };
+    }
+};
 
-appRouter(app, express);
+// Execute setup
+await setup();
 
-// Export handler for Vercel
-export const handler = serverless(app);
+// Export handler for serverless function
+export { handler };

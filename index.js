@@ -1,23 +1,41 @@
-// Import required packages
+// // Import required packages
+// import express from 'express';
+// import dotenv from 'dotenv';
+// import { connectDB } from './DB/connectionDB.js';
+// import { appRouter } from './src/appRouter.js';
+
+// // Load environment variables
+// dotenv.config();
+
+// // Initialize express app
+// const app = express();
+// const port = process.env.PORT;
+
+// // Connect to database
+// connectDB();
+
+// // Setup routes
+// appRouter(app, express);
+
+// // Start server
+// app.listen(port, () => {
+//     console.log(`Server is running successfully on port ${port}`);
+// });
 import express from 'express';
 import dotenv from 'dotenv';
-import { connectDB } from './DB/connectionDB.js';
-import { appRouter } from './src/appRouter.js';
+import { connectDB } from '../DB/connectionDB.js';
+import { appRouter } from '../src/appRouter.js';
+import serverless from 'serverless-http';
 
-// Load environment variables
+// Load env variables
 dotenv.config();
 
-// Initialize express app
+// Connect to DB once globally (safe for serverless)
+await connectDB();
+
+// Initialize Express app
 const app = express();
-const port = process.env.PORT;
-
-// Connect to database
-connectDB();
-
-// Setup routes
 appRouter(app, express);
 
-// Start server
-app.listen(port, () => {
-    console.log(`Server is running successfully on port ${port}`);
-});
+// Export handler for Vercel
+export const handler = serverless(app);

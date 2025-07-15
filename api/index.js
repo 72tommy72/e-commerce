@@ -11,13 +11,14 @@ const app = express();
 // ✅ Connect to DB
 await connectDB();
 
+// ✅ Add root route
+app.get('/', (req, res) => {
+    return res.json({ message: '✅ E-commerce API is working!' });
+});
+
 // ✅ Load your app routes
 appRouter(app, express);
 
-// ✅ Add root route
-app.get('/', (req, res) => {
-    res.send('✅ E-commerce API is working!');
-});
 
 // ✅ Export default for Vercel
 export default serverless(app);

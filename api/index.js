@@ -4,19 +4,20 @@ import serverless from 'serverless-http';
 import { appRouter } from '../src/appRouter.js';
 import { connectDB } from '../DB/connectionDB.js';
 
-
-// Load environment variables
 dotenv.config();
 
-// Initialize app
 const app = express();
 
-// Connect to DB then apply routes
-connectDB();
+// ✅ Connect to DB
+await connectDB();
+
+// ✅ Load your app routes
 appRouter(app, express);
-app.get("/", (req, res) => {
-    res.send("✅ E-commerce API is working!");
+
+// ✅ Add root route
+app.get('/', (req, res) => {
+    res.send('✅ E-commerce API is working!');
 });
 
-// Export for Vercel
+// ✅ Export default for Vercel
 export default serverless(app);

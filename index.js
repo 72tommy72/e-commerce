@@ -24,9 +24,9 @@
 // Import required packages
 import express from 'express';
 import dotenv from 'dotenv';
-import { connectDB } from '../DB/connectionDB.js';
-import { appRouter } from '../src/appRouter.js';
 import serverless from 'serverless-http';
+import { connectDB } from './DB/connectionDB.js';
+import { appRouter } from './src/appRouter.js';
 
 // Load environment variables
 dotenv.config();
@@ -46,6 +46,8 @@ const setup = async () => {
         
         // Create serverless handler after connection is established
         handler = serverless(app); // Handler must be created after connection
+        console.log(`Server is running successfully on port ${process.env.PORT}`);
+        
     } catch (error) {
         // Log error and create error handler
         console.error("❌ Error in setup:", error);

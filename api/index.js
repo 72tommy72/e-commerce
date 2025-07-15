@@ -14,6 +14,9 @@ const app = express();
 // Connect to DB then apply routes
 connectDB();
 appRouter(app, express);
+app.get("/", (req, res) => {
+    res.send("✅ E-commerce API is working!");
+});
 
 // Export for Vercel
 export default serverless(app);

@@ -1,4 +1,4 @@
-import { User } from "../../../DB/models/user.model.js";
+import { User } from "./auth.model.js";
 import { Token } from "../../../DB/models/token.model.js";
 import { catchError } from "../../utils/catchError.js";
 import bcryptjs from "bcryptjs";
@@ -90,7 +90,6 @@ export const register = catchError(async(req, res, next) => {
         user,
     });
 });
-
 // activatedAccount
 export const activatedAccount = catchError(async(req, res, next) => {
     //find user & delete activationCode & update is confirmed

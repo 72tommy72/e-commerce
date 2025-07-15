@@ -1,6 +1,7 @@
-import { Cart } from "../../../DB/models/cart.model.js";
-import { OrderModel } from "../../../DB/models/order.model.js";
-import { Product } from "../../../DB/models/product.model.js";
+import { Cart } from "../cart/cart.model.js";
+import { OrderModel } from "./order.model.js";
+import { Product } from "../product/product.model.js";
+
 import { catchError } from "../../utils/catchError.js";
 import { createInvoice } from "../../utils/createInvoice.js";
 import { fileURLToPath } from 'url'

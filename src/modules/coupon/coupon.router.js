@@ -6,8 +6,13 @@ import { createCouponSchema, updateCouponSchema, deleteCouponSchema } from "./co
 import { createCoupon, updateCoupon, deleteCoupon, allCoupons } from "./coupon.controller.js";
 
 const router = Router();
-//CRUD
-//create
+
+/**
+ * @desc    Create new coupon
+ * @route   POST /
+ * @access  Private (Admin only)
+ * @body    {code, discount, expireDate}
+ */
 router.post(
     "/",
     isAuthenticated,
@@ -15,7 +20,14 @@ router.post(
     isValid(createCouponSchema),
     createCoupon
 );
-//update
+
+/**
+ * @desc    Update existing coupon
+ * @route   PATCH /:code
+ * @access  Private (Admin only)
+ * @params  code
+ * @body    {discount, expireDate}
+ */
 router.patch(
     "/:code",
     isAuthenticated,
@@ -23,7 +35,13 @@ router.patch(
     isValid(updateCouponSchema),
     updateCoupon
 );
-//delete
+
+/**
+ * @desc    Delete coupon
+ * @route   DELETE /:code
+ * @access  Private (Admin only)
+ * @params  code
+ */
 router.delete(
     "/:code",
     isAuthenticated,
@@ -31,6 +49,12 @@ router.delete(
     isValid(deleteCouponSchema),
     deleteCoupon
 );
+
+/**
+ * @desc    Get all coupons
+ * @route   GET /
+ * @access  Public
+ */
 router.get(
     "/",
     allCoupons

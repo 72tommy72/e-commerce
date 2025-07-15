@@ -1,6 +1,6 @@
 import { catchError } from "../../utils/catchError.js";
-import { Product } from "../../../DB/models/product.model.js";
-import { Category } from "../../../DB/models/category.model.js";
+import { Product } from "./product.model.js";
+import { Category } from "../category/category.model.js";
 import { nanoid } from 'nanoid'
 import cloudinary from "../../utils/cloud.js";
 

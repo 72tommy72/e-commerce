@@ -87,7 +87,7 @@ function generateInvoiceTable(doc, invoice) {
         generateTableRow(
             doc,
             position,
-            item.name,  
+            item.name,
             formatCurrency(item.itemPrice),
             item.quantity,
             formatCurrency(item.totalPrice)
@@ -113,7 +113,7 @@ function generateInvoiceTable(doc, invoice) {
         "",
         "Discount",
         "",
-        formatCurrency(invoice.paid - invoice.subtotal )
+        formatCurrency(invoice.paid - invoice.subtotal)
     );
 
     const duePosition = paidToDatePosition + 25;
@@ -124,7 +124,7 @@ function generateInvoiceTable(doc, invoice) {
         "",
         "order final price",
         "",
-        formatCurrency( invoice.paid)
+        formatCurrency(invoice.paid)
     );
     doc.font("Helvetica");
 }
@@ -166,7 +166,7 @@ function generateHr(doc, y) {
 }
 
 function formatCurrency(cents) {
-    return "EG" + pounds ;
+    return "EG" + pounds;
 }
 
 function formatDate(date) {

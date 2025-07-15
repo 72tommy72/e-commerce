@@ -1,19 +1,18 @@
 import multer, { diskStorage } from "multer"
 
-export const filterObject = {
-    image: ["image/png", "image/jpg", "image/jpeg"],
-    video: ["video/mp4", "video/mpeg"]
-}
+// export const filterObject = {
+//     image: ["image/png", "image/jpg", "image/jpeg"],
+//     video: ["video/mp4", "video/mpeg"]
+// }
 
-export const  fileUpload =  (filterArr) => {
-
+export const fileUpload = () => {
     const fileFilter = (req, file, cb) => {
-        if (!filterArr.include(file.mimetype)) {
-            return cb(new Error("Invalid file type"), false);
-        }
+        // if (!(file.mimetype in filterArr)) {
+        //     return cb(new Error("Invalid file type"), false);
+        // }
+
         return cb(null, true)
     }
-
     return multer({ storage: diskStorage({}), fileFilter })
 }
 

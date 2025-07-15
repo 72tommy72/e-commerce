@@ -1,4 +1,4 @@
-import { Category } from "../../../DB/models/category.model.js";
+import { Category } from "./category.model.js";
 import { catchError } from "../../utils/catchError.js";
 import cloudinary from "../../utils/cloud.js";
 import slugify from "slugify"

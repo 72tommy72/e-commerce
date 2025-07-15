@@ -7,6 +7,8 @@ import morgan from 'morgan'
 import couponRouter from './modules/coupon/coupon.router.js'
 import cartRouter from './modules/cart/cart.router.js'
 import orderRouter from './modules/order/order.router.js'
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../docs/index.js';
 
 export const appRouter = (app, express) => {
     //morgan
@@ -39,7 +41,7 @@ export const appRouter = (app, express) => {
             return next();
         }
         express.json()(req, res, next);
-    }) 
+    })
     //APIs for user
     app.use('/auth', authRouter)
     //APIs for category
@@ -57,7 +59,8 @@ export const appRouter = (app, express) => {
     app.use('/cart', cartRouter)
     //APIs for order
     app.use('/order', orderRouter)
-
+    // Swagger UI
+    app.use('/swagger-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     // Not Found Page 
     app.use('/*', (req, res, next) => {
         return next(new Error('Not Found', { cause: 404 }));

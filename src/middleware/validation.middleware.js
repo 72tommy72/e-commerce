@@ -19,6 +19,4 @@ export const isValid = (schema) => {
         }
         return next()
     }
-
-
 }

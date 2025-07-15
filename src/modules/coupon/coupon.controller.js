@@ -1,6 +1,6 @@
 import { catchError } from "../../utils/catchError.js";
 import voucher_codes from 'voucher-code-generator';
-import { Coupon } from '../../../DB/models/coupon.model.js'
+import { Coupon } from './coupon.model.js'
 
 export const createCoupon = catchError(async (req, res, next) => { 
     //generate code

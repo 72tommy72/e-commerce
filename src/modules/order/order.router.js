@@ -6,7 +6,28 @@ import { createOrder, cancelOrder } from "./order.controller.js";
 
 const router = Router()
 
-router.post('/', isAuthenticated, isValid(createOrderSchema), createOrder)
-router.patch('/:orderId', isAuthenticated, isValid(cancelOrderSchema), cancelOrder)
+/**
+ * @desc Create new order
+ * @route POST /order
+ * @access Private - Requires authentication
+ * @validation Validates order creation data
+ */
+router.post('/', 
+    isAuthenticated, 
+    isValid(createOrderSchema), 
+    createOrder
+)
+
+/**
+ * @desc Cancel existing order
+ * @route PATCH /order/:orderId
+ * @access Private - Requires authentication
+ * @validation Validates order cancellation data
+ */
+router.patch('/:orderId', 
+    isAuthenticated, 
+    isValid(cancelOrderSchema), 
+    cancelOrder
+)
 
 export default router;

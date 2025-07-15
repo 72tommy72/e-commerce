@@ -1,6 +1,6 @@
 import { catchError } from "../../utils/catchError.js";
-import { Product } from "../../../DB/models/product.model.js";
-import { Cart } from "../../../DB/models/cart.model.js";
+import { Cart } from "./cart.model.js";
+import { Product } from "../product/product.model.js";
 
 export const addToCart = catchError(async (req, res, next) => {
     //data

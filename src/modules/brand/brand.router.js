@@ -1,46 +1,71 @@
+/**
+ * Brand Router Module
+ * Handles all brand-related routes and their middleware
+ */
+
 import { Router } from "express";
 import { isValid } from "../../middleware/validation.middleware.js";
 import { createBrandSchema, deleteBrandSchema, updateBrandSchema } from "./brand.validation.js";
-// import { createBrand, deleteBrand, updateBrand, allBrands } from "./brand.controller.js";
 import { isAuthenticated } from "../../middleware/authentication.middleware.js";
 import { isAuthorized } from "../../middleware/authorization.middleware.js";
-import { filterObject, fileUpload } from "../../utils/multer.js";
-import brandRouter from "./../../modules/brand/brand.router.js";
+import { fileUpload } from "../../utils/multer.js";
 import { allBrands } from "./brand.controller.js";
 
-
-
+// Initialize Express Router
 const router = Router();
 
-//subBrand
-// router.use("/:brandId/subBrand", createBrand)
+/**
+ * Brand Routes Configuration
+ * Defines all available endpoints for brand management
+ */
 
-//create Brand
+/**
+ * @route   POST /createBrand
+ * @desc    Create a new brand
+ * @access  Admin only
+ * @body    {BrandImage} - Brand image file
+ */
 router.post(
     "/createBrand",
     isAuthenticated,
     isAuthorized("admin"),
-    fileUpload(filterObject.image).single("BrandImage"), // form -data 
-    isValid(createBrandSchema), // multer turn data to json because express do not support that
-    // createBrand
+    fileUpload().single("BrandImage"),
+    isValid(createBrandSchema)
 );
-//update Brand
+
+/**
+ * @route   PATCH /:brandId
+ * @desc    Update existing brand
+ * @access  Admin only
+ * @params  {brandId} - Brand ID to update
+ * @body    {BrandImage} - Brand image file
+ */
 router.patch(
     "/:brandId",
     isAuthenticated,
     isAuthorized("admin"),
-    fileUpload(filterObject.image).single("BrandImage"), // form -data 
-    isValid(updateBrandSchema), // multer turn data to json because express do not support that
-    // updateBrand
+    fileUpload().single("BrandImage"),
+    isValid(updateBrandSchema)
 );
-//delete Brand
+
+/**
+ * @route   DELETE /:brandId
+ * @desc    Delete a brand
+ * @access  Admin only
+ * @params  {brandId} - Brand ID to delete
+ */
 router.delete(
     "/:brandId",
     isAuthenticated,
     isAuthorized("admin"),
-    isValid(deleteBrandSchema), // multer turn data to json because express do not support that
-    // deleteBrand
+    isValid(deleteBrandSchema)
 );
-// get Brands
-router.get("/", allBrands)
+
+/**
+ * @route   GET /
+ * @desc    Retrieve all brands
+ * @access  Public
+ */
+router.get("/", allBrands);
+
 export default router;

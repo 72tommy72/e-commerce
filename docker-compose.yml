@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - MONGO_URL=mongodb://mongo:27017/ecommerce
+      - STRIPE_SECRET_KEY=your_test_stripe_key
+      - JWT_SECRET=your_jwt_secret
+      - EMAIL_USER=your_email@example.com
+      - EMAIL_PASS=your_email_password
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

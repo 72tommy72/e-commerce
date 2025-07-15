@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { catchError } from "../utils/catchError.js";
 import { Token } from "../../DB/models/token.model.js";
-import { User } from "../../DB/models/user.model.js";
+import { User } from "../modules/auth/auth.model.js";
 
 export const isAuthenticated = catchError(async(req, res, next) => {
     // check if token is existence

@@ -1,8 +1,9 @@
-import { Category } from "../../../DB/models/category.model.js";
-import { SubCategory } from "../../../DB/models/sub.category.model.js";
+import { SubCategory } from "./subCategory.model.js";
+import { Category } from "../category/category.model.js";
 import { catchError } from "../../utils/catchError.js";
 import cloudinary from "../../utils/cloud.js";
 import slugify from "slugify"
+
 
 export const createSubCategory = catchError(async (req, res, next) => {
     //data  

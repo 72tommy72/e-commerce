@@ -1,4 +1,4 @@
-import { Brand } from "../../../DB/models/brand.model.js";
+import { Brand } from "./brand.model.js";
 import { catchError } from "../../utils/catchError.js";
 import cloudinary from "../../utils/cloud.js";
 import slugify from "slugify";

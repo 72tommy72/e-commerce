@@ -1,24 +1,42 @@
 import mongoose, { model, Schema, Types } from "mongoose";
 
-//schema
-export const userSchema = new Schema({
+/**
+ * Token Schema Definition
+ * Represents the structure for storing authentication tokens
+ */
+const tokenSchema = new Schema({
+    // The actual token string
     token: {
         type: String,
-        require: true
+        required: true
     },
+
+    // Reference to the associated user
     user: {
         type: Types.ObjectId,
         ref: "User"
     },
+
+    // Token validity status
     isValid: {
         type: Boolean,
         default: true
     },
-    agent: String, // to knew name of device who open the app
-    expiredAt : String
 
+    // Device/browser information
+    agent: {
+        type: String,
+        required: false
+    },
 
-}, { timestamp: true })
+    // Token expiration timestamp
+    expiredAt: {
+        type: String,
+        required: false
+    }
+}, { 
+    timestamps: true // Automatically manage createdAt and updatedAt
+});
 
-//model
-export const Token = mongoose.models.Token || model("Token", userSchema)
+// Export the Token model, creating it if it doesn't exist
+export const Token = mongoose.models.Token || model("Token", tokenSchema);

@@ -1,38 +1,68 @@
 import { Router } from "express";
 import { isAuthenticated } from "../../middleware/authentication.middleware.js";
 import { isAuthorized } from "../../middleware/authorization.middleware.js";
-import { fileUpload, filterObject } from "../../utils/multer.js";
+import { fileUpload } from "../../utils/multer.js";
 import { isValid } from "../../middleware/validation.middleware.js";
 import { createProduct, deleteProduct, allProducts, singleProduct } from "../product/product.controller.js";
 import { createProductSchema, deleteProductSchema } from "./product.validation.js";
 
 const router = Router({ mergeParams: true })
 
-//createProduct
+/**
+ * Create Product Endpoint
+ * @route POST /
+ * @desc Creates a new product with images
+ * @access Private - Admin only
+ */
 router.post('/',
     isAuthenticated,
     isAuthorized("admin"),
-    fileUpload(filterObject.image).fields([{ name: 'defaultImage', maxCount: 1 }, { name: 'subdefaultImage', maxCount: 3 }]),
+    fileUpload().fields([
+        { name: 'defaultImage', maxCount: 1 }, 
+        { name: 'subdefaultImage', maxCount: 3 }
+    ]),
     isValid(createProductSchema),
-    createProduct)
+    createProduct
+)
 
-//deleteProduct
+/**
+ * Delete Product Endpoint
+ * @route DELETE /:productId
+ * @desc Deletes an existing product
+ * @access Private - Admin only
+ */
 router.delete('/:productId',
     isAuthenticated,
     isAuthorized("admin"),
     isValid(deleteProductSchema),
-    deleteProduct)
+    deleteProduct
+)
 
-//allProducts
+/**
+ * Get All Products Endpoint
+ * @route GET /
+ * @desc Retrieves all products
+ * @access Public
+ */
 router.get('/', allProducts)
 
-//allProducts
+/**
+ * Get Products by Category Endpoint
+ * @route GET /category/:categoryId
+ * @desc Retrieves all products in a specific category
+ * @access Public
+ */
 router.get('/category/:categoryId', allProducts)
 
-//singleProduct
+/**
+ * Get Single Product Endpoint
+ * @route GET /single/:productId
+ * @desc Retrieves details of a specific product
+ * @access Public
+ */
 router.get('/single/:productId',
-    isValid(deleteProductSchema),  // the same schema
-    singleProduct)
-
+    isValid(deleteProductSchema),
+    singleProduct
+)
 
 export default router;

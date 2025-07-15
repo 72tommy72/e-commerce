@@ -1,5 +1,5 @@
-import { Cart } from "../../../DB/models/cart.model.js"
-import { Product } from "../../../DB/models/product.model.js"
+import { Cart } from "../cart/cart.model.js"
+import { Product } from "../product/product.model.js"
 
 export const clearCart = async(userId) => {
     await Cart.findOneAndUpdate({ user : userId}, {products : []})

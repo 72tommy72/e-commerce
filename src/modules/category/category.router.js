@@ -4,45 +4,82 @@ import { createCategorySchema, deleteCategorySchema, updateCategorySchema } from
 import { createCategory, deleteCategory, updateCategory, allCategories } from "./category.controller.js";
 import { isAuthenticated } from "../../middleware/authentication.middleware.js";
 import { isAuthorized } from "../../middleware/authorization.middleware.js";
-import { filterObject, fileUpload } from "../../utils/multer.js";
-import  subCategoryRouter  from "../subCategory/subCategory.router.js";
-import productRouter  from "../product/product.router.js";
-
-
+import subCategoryRouter from "../subCategory/subCategory.router.js";
+import productRouter from "../product/product.router.js";
+import { fileUpload } from "../../utils/multer.js";
 
 const router = Router();
 
-//subCategory
-router.use("/:categoryId/subCategory", subCategoryRouter)
-//product
-router.use("/:categoryId/product", productRouter)
+/**
+ * Nested Routes
+ * ============================================
+ */
 
-//create category
+/**
+ * SubCategory Routes
+ * Handles all subcategory operations under a specific category
+ */
+router.use("/:categoryId/subCategory", subCategoryRouter);
+
+/**
+ * Product Routes
+ * Handles all product operations under a specific category
+ */
+router.use("/:categoryId/product", productRouter);
+
+/**
+ * Category Routes
+ * ============================================
+ */
+
+/**
+ * Create Category
+ * POST /createCategory
+ * Requires authentication and admin privileges
+ * Accepts form-data with category image
+ */
 router.post(
     "/createCategory",
     isAuthenticated,
     isAuthorized("admin"),
-    fileUpload(filterObject.image).single("categoryImage"), // form -data 
-    isValid(createCategorySchema), // multer turn data to json because express do not support that
+    fileUpload().single("categoryImage"),
+    isValid(createCategorySchema),
     createCategory
 );
-//update category
+
+/**
+ * Update Category
+ * PATCH /:categoryId
+ * Requires authentication and admin privileges
+ * Accepts form-data with updated category image
+ */
 router.patch(
     "/:categoryId",
     isAuthenticated,
     isAuthorized("admin"),
-    fileUpload(filterObject.image).single("categoryImage"), // form -data 
-    isValid(updateCategorySchema), // multer turn data to json because express do not support that
+    fileUpload().single("categoryImage"),
+    isValid(updateCategorySchema),
     updateCategory
 );
-//delete category
+
+/**
+ * Delete Category
+ * DELETE /:categoryId
+ * Requires authentication and admin privileges
+ */
 router.delete(
     "/:categoryId",
     isAuthenticated,
     isAuthorized("admin"),
-    isValid(deleteCategorySchema), // multer turn data to json because express do not support that
+    isValid(deleteCategorySchema),
     deleteCategory
 );
-//get category
-router.get("/", allCategories)
+
+/**
+ * Get All Categories
+ * GET /
+ * Public route - no authentication required
+ */
+router.get("/", allCategories);
+
 export default router;

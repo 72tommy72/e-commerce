@@ -39,15 +39,15 @@ const setup = async () => {
     try {
         // Connect to database
         await connectDB(); // Must use await here
-        
+
         // Initialize express app and routes
         const app = express();
         appRouter(app, express);
-        
+
         // Create serverless handler after connection is established
         handler = serverless(app); // Handler must be created after connection
         console.log(`Server is running successfully on port ${process.env.PORT}`);
-        
+
     } catch (error) {
         // Log error and create error handler
         console.error("❌ Error in setup:", error);
@@ -61,4 +61,6 @@ const setup = async () => {
 await setup();
 
 // Export handler for serverless function
-export { handler };
+export default async (req, res) => {
+    return handler(req, res);
+};

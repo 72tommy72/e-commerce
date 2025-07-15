@@ -1,8 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import serverless from 'serverless-http';
-import { appRouter } from '../src/appRouter';
-import { connectDB } from '../DB/connectionDB';
+import { appRouter } from '../src/appRouter.js';
+import { connectDB } from '../DB/connectionDB.js';
 
 
 // Load environment variables
